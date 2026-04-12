@@ -1,0 +1,9 @@
+# ----------------------------------------
+# Last updated: 2026-04-12
+# ----------------------------------------
+
+User-agent: *
+
+Allow: /
+
+Sitemap: https://ostservices.com/sitemap.xml

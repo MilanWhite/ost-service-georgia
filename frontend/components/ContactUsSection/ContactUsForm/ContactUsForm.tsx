@@ -48,7 +48,10 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const baseURL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000/";
+const baseURL =
+    import.meta.env.VITE_CONTACT_API_URL ?? "http://localhost:5000/";
+
+console.log(baseURL);
 
 const contactRequestControllers = new Set<AbortController>();
 
@@ -118,6 +121,15 @@ const getContactLanguageFromSiteLanguage = (language?: string) => {
     }
 };
 
+const getDefaultFormValues = (language: FormData["language"]): FormData => ({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    message: "",
+    language,
+});
+
 const ContactUsFormStandalone = () => {
     const { t, i18n } = useTranslation();
     const [contactError, setContactError] = useState<string | null>(null);
@@ -126,6 +138,7 @@ const ContactUsFormStandalone = () => {
     const defaultLanguage = getContactLanguageFromSiteLanguage(
         i18n.resolvedLanguage ?? i18n.language,
     );
+    const defaultFormValues = getDefaultFormValues(defaultLanguage);
 
     const {
         register,
@@ -135,9 +148,7 @@ const ContactUsFormStandalone = () => {
         formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(schema),
-        defaultValues: {
-            language: defaultLanguage,
-        },
+        defaultValues: defaultFormValues,
     });
 
     useEffect(() => {
@@ -163,7 +174,7 @@ const ContactUsFormStandalone = () => {
             await postContactMessage(contactInfo);
             setContactError(null);
             setShowSuccess(true);
-            reset({ language: defaultLanguage });
+            reset(defaultFormValues);
         } catch (err: unknown) {
             if (isAbortError(err)) {
                 return;

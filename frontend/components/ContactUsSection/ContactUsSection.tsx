@@ -8,8 +8,26 @@ import ContactUsForm from "./ContactUsForm";
 import GoogleMap from "./GoogleMap";
 import { useTranslation } from "react-i18next";
 
+const toTelephoneHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
+
 const ContactUsSection = () => {
     const { t } = useTranslation();
+    const contactSections = [
+        {
+            headingKey: "ContactPage.georgia_heading",
+            addressValue1Key: "ContactPage.georgia_address_value1",
+            addressValue2Key: "ContactPage.georgia_address_value2",
+            telephoneValueKey: "ContactPage.georgia_telephone_value",
+            emailValueKey: "ContactPage.georgia_email_value",
+        },
+        {
+            headingKey: "ContactPage.canada_heading",
+            addressValue1Key: "ContactPage.canada_address_value1",
+            addressValue2Key: "ContactPage.canada_address_value2",
+            telephoneValueKey: "ContactPage.canada_telephone_value",
+            emailValueKey: "ContactPage.canada_email_value",
+        },
+    ];
 
     return (
         <div className="relative isolate bg-white">
@@ -66,62 +84,180 @@ const ContactUsSection = () => {
                         <p className="mt-4 max-w-2xl lg:text-lg text-gray-600">
                             {t("ContactPage.contact_description")}
                         </p>
-                        <dl className="mt-10 space-y-4 text-base/7 text-gray-600">
-                            <div className="flex gap-x-4">
-                                <dt className="flex-none">
-                                    <span className="sr-only">
-                                        {t("ContactPage.address_label")}
-                                    </span>
-                                    <BuildingOffice2Icon
-                                        aria-hidden="true"
-                                        className="h-7 w-6 text-primary"
-                                    />
-                                </dt>
-                                <dd>
-                                    {t("ContactPage.address_value1")}
-                                    <br />
-                                    {t("ContactPage.address_value2")}
-                                </dd>
-                            </div>
-                            <div className="flex gap-x-4">
-                                <dt className="flex-none">
-                                    <span className="sr-only">
-                                        {t("ContactPage.telephone_label")}
-                                    </span>
-                                    <PhoneIcon
-                                        aria-hidden="true"
-                                        className="h-7 w-6 text-primary"
-                                    />
-                                </dt>
-                                <dd>
-                                    <a
-                                        href="tel:+1 (647) 857-3105"
-                                        className="hover:text-gray-900"
+                        <div className="mt-10 space-y-8 text-base/7 text-gray-600 sm:hidden">
+                            {contactSections.map((contactSection) => {
+                                const telephone = t(
+                                    contactSection.telephoneValueKey,
+                                );
+                                const email = t(contactSection.emailValueKey);
+
+                                return (
+                                    <div key={contactSection.headingKey}>
+                                        <h3 className="text-lg font-semibold text-gray-900">
+                                            {t(contactSection.headingKey)}
+                                        </h3>
+                                        <dl className="mt-4 space-y-4">
+                                            <div className="flex gap-x-4">
+                                                <dt className="flex-none">
+                                                    <span className="sr-only">
+                                                        {t(
+                                                            "ContactPage.address_label",
+                                                        )}
+                                                    </span>
+                                                    <BuildingOffice2Icon
+                                                        aria-hidden="true"
+                                                        className="h-7 w-6 text-primary"
+                                                    />
+                                                </dt>
+                                                <dd>
+                                                    {t(
+                                                        contactSection.addressValue1Key,
+                                                    )}
+                                                    <br />
+                                                    {t(
+                                                        contactSection.addressValue2Key,
+                                                    )}
+                                                </dd>
+                                            </div>
+                                            <div className="flex gap-x-4">
+                                                <dt className="flex-none">
+                                                    <span className="sr-only">
+                                                        {t(
+                                                            "ContactPage.telephone_label",
+                                                        )}
+                                                    </span>
+                                                    <PhoneIcon
+                                                        aria-hidden="true"
+                                                        className="h-7 w-6 text-primary"
+                                                    />
+                                                </dt>
+                                                <dd>
+                                                    <a
+                                                        href={toTelephoneHref(
+                                                            telephone,
+                                                        )}
+                                                        className="hover:text-gray-900"
+                                                    >
+                                                        {telephone}
+                                                    </a>
+                                                </dd>
+                                            </div>
+                                            <div className="flex gap-x-4">
+                                                <dt className="flex-none">
+                                                    <span className="sr-only">
+                                                        {t(
+                                                            "ContactPage.email_label",
+                                                        )}
+                                                    </span>
+                                                    <EnvelopeIcon
+                                                        aria-hidden="true"
+                                                        className="h-7 w-6 text-primary"
+                                                    />
+                                                </dt>
+                                                <dd>
+                                                    <a
+                                                        href={`mailto:${email}`}
+                                                        className="hover:text-gray-900"
+                                                    >
+                                                        {email}
+                                                    </a>
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="mt-10 hidden text-base/7 text-gray-600 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-4">
+                            {contactSections.map((contactSection) => (
+                                <div key={`${contactSection.headingKey}-heading`}>
+                                    <h3 className="text-lg font-semibold text-gray-900">
+                                        {t(contactSection.headingKey)}
+                                    </h3>
+                                </div>
+                            ))}
+                            {contactSections.map((contactSection) => (
+                                <div
+                                    key={`${contactSection.headingKey}-address`}
+                                    className="flex gap-x-4"
+                                >
+                                    <div className="flex-none">
+                                        <span className="sr-only">
+                                            {t("ContactPage.address_label")}
+                                        </span>
+                                        <BuildingOffice2Icon
+                                            aria-hidden="true"
+                                            className="h-7 w-6 text-primary"
+                                        />
+                                    </div>
+                                    <div>
+                                        {t(contactSection.addressValue1Key)}
+                                        <br />
+                                        {t(contactSection.addressValue2Key)}
+                                    </div>
+                                </div>
+                            ))}
+                            {contactSections.map((contactSection) => {
+                                const telephone = t(
+                                    contactSection.telephoneValueKey,
+                                );
+
+                                return (
+                                    <div
+                                        key={`${contactSection.headingKey}-telephone`}
+                                        className="flex gap-x-4"
                                     >
-                                        {t("ContactPage.telephone_value")}
-                                    </a>
-                                </dd>
-                            </div>
-                            <div className="flex gap-x-4">
-                                <dt className="flex-none">
-                                    <span className="sr-only">
-                                        {t("ContactPage.email_label")}
-                                    </span>
-                                    <EnvelopeIcon
-                                        aria-hidden="true"
-                                        className="h-7 w-6 text-primary"
-                                    />
-                                </dt>
-                                <dd>
-                                    <a
-                                        href="mailto:bestiklena1@gmail.com"
-                                        className="hover:text-gray-900"
+                                        <div className="flex-none">
+                                            <span className="sr-only">
+                                                {t("ContactPage.telephone_label")}
+                                            </span>
+                                            <PhoneIcon
+                                                aria-hidden="true"
+                                                className="h-7 w-6 text-primary"
+                                            />
+                                        </div>
+                                        <div>
+                                            <a
+                                                href={toTelephoneHref(
+                                                    telephone,
+                                                )}
+                                                className="hover:text-gray-900"
+                                            >
+                                                {telephone}
+                                            </a>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                            {contactSections.map((contactSection) => {
+                                const email = t(contactSection.emailValueKey);
+
+                                return (
+                                    <div
+                                        key={`${contactSection.headingKey}-email`}
+                                        className="flex gap-x-4"
                                     >
-                                        {t("ContactPage.email_value")}
-                                    </a>
-                                </dd>
-                            </div>
-                        </dl>
+                                        <div className="flex-none">
+                                            <span className="sr-only">
+                                                {t("ContactPage.email_label")}
+                                            </span>
+                                            <EnvelopeIcon
+                                                aria-hidden="true"
+                                                className="h-7 w-6 text-primary"
+                                            />
+                                        </div>
+                                        <div>
+                                            <a
+                                                href={`mailto:${email}`}
+                                                className="hover:text-gray-900"
+                                            >
+                                                {email}
+                                            </a>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                     <GoogleMap />
                 </div>
